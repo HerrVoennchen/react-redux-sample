@@ -1,0 +1,44 @@
+/* enaio colors */
+
+body {
+	background-color: #FAFAFA;
+	margin-left: 2.5rem;
+	margin-right: 2.5rem;
+	margin-bottom: 1rem;
+}
+/* 0073C6*/
+.btn {
+	border-color: #0073C6;
+	color: #0073C6;
+	border-radius: 0;
+	min-width: 10rem;
+}
+
+.btn:hover {
+	border-color: #0073C6;
+	background-color: #0073C6;
+}
+
+.btn:active, .btn.active {
+	border-color: #0073C6;
+	background-color: #0063AA;
+}
+
+ul {
+	margin-top: .5rem;
+}
+
+.panel-primary {
+	border-color: #0073C6;
+	border-radius: 0;
+}
+
+.panel-header {
+	padding: 1.5rem 1.5rem 0rem 1.5rem !important;
+}
+
+.loading::after {
+	border: .2rem solid #0073C6;
+	border-right-color: transparent;
+	border-top-color: transparent;
+}
