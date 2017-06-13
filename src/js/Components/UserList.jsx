@@ -7,7 +7,8 @@ import { actions, selectors } from '../Store';
 		loading: selectors.users.listRequest(store).isPending,
 		users: selectors.users.listRequest(store).data
 	};
-})
+}, { startRequest: actions.users.listRequest })
+
 export default class UserList extends React.Component {
 	constructor(props) {
 		super(props);
@@ -18,7 +19,8 @@ export default class UserList extends React.Component {
 	handleFetch(e) {
 		e.preventDefault();
 		//this.props.dispatch(fetchData3());
-		this.props.dispatch(actions.users.listRequest({}));
+		//this.props.dispatch(actions.users.listRequest({}));
+		this.props.startRequest({});
 	}
 
 	render() {
