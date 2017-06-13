@@ -1,11 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { fetchData, fetchData2, fetchData3 } from '../Actions/UserActions';
+import { actions, selectors } from '../Store';
 
 @connect(store => {
 	return {
-		loading: store.metadata.isFetching,
-		users: store.userList
+		loading: selectors.users.listRequest(store).isPending,
+		users: selectors.users.listRequest(store).data
 	};
 })
 export default class UserList extends React.Component {
@@ -17,7 +17,8 @@ export default class UserList extends React.Component {
 
 	handleFetch(e) {
 		e.preventDefault();
-		this.props.dispatch(fetchData3());
+		//this.props.dispatch(fetchData3());
+		this.props.dispatch(actions.users.listRequest({}));
 	}
 
 	render() {
@@ -28,7 +29,7 @@ export default class UserList extends React.Component {
 			loadingClass = ' loading';
 		}
 
-		if (this.props.users.length > 0) {
+		if (this.props.users && this.props.users.length > 0) {
 			let contentTmp = [];
 			panelContent = this.props.users.map(user =>
 				<li key={user.id}>
@@ -55,7 +56,7 @@ export default class UserList extends React.Component {
 						&nbsp;
 						<button
 							className={'btn btn-sm' + loadingClass}
-							onClick={this.handleFetch.bind(this)}
+							onClick={this.handleFetch}
 						>
 							<span>Aktualisieren</span>
 						</button>

@@ -3,8 +3,30 @@ import { composeWithDevTools } from 'redux-devtools-extension';
 import thunk from 'redux-thunk';
 import { createLogger } from 'redux-logger';
 import promise from 'redux-promise-middleware';
-import reducers from './Reducers';
+import { createEntities, createMiddleware } from 'redux-tiles';
+import tiles from './Actions/UserActions';
+import axios from 'axios';
 
-const middleware = applyMiddleware(promise(), thunk, createLogger());
+//const api = axios.create();
+const { actions, reducer, selectors } = createEntities(tiles);
+const { middleware, waitTiles } = createMiddleware({
+	//api,
+	actions,
+	selectors
+});
 
-export default createStore(reducers, composeWithDevTools(middleware));
+const middlewareCompl = applyMiddleware(
+	promise(),
+	thunk,
+	createLogger(),
+	middleware
+);
+
+const store = createStore(reducer, composeWithDevTools(middlewareCompl));
+
+export { store };
+export { actions };
+export { selectors };
+export { waitTiles };
+
+export default { store, waitTiles, actions, selectors };

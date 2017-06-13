@@ -25,8 +25,8 @@ module.exports = {
 			'redux-logger',
 			'redux-promise-middleware',
 			'redux-thunk',
-			'toastr',
-			'lodash'
+			'redux-tiles',
+			'redux-devtools-extension'
 		]
 	},
 	output: {

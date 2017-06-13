@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { selectors } from '../Store';
 
 @connect(store => {
 	return {
-		loading: store.metadata.isFetching
+		loading: selectors.users.listRequest(store).isPending
 	};
 })
 export default class Footer extends React.Component {
