@@ -1,36 +1,41 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { fetchData, fetchData2, fetchData3 } from '../Actions/UserActions';
+import { actions, selectors } from '../Store';
 
-@connect(store => {
+const mapStateToProps = state => {
+	const { data, error, isPending } = selectors.api.data(state);
 	return {
-		loading: store.metadata.isFetching,
-		users: store.userList
+		loading: isPending,
+		users: data,
+		error,
 	};
-})
+};
+
+const mapDispatchToProps = {
+	fetchUsers: actions.api.data,
+};
+
+@connect(mapStateToProps, mapDispatchToProps)
 export default class UserList extends React.Component {
-	constructor(props) {
-		super(props);
-
-		this.handleFetch = this.handleFetch.bind(this);
-	}
-
-	handleFetch(e) {
+	// we bind via creating an instance of this function for each object
+	// so it will belong to object, not to prototype
+	handleFetch = (e) => {
 		e.preventDefault();
-		this.props.dispatch(fetchData3());
+		this.props.fetchUsers();
 	}
 
 	render() {
+		const { loading, users = [] } = this.props;
 		let loadingClass = '';
 		let panelContent = <li><mark>Keine Benutzer vorhanden</mark></li>;
 
-		if (this.props.loading) {
+		if (loading) {
 			loadingClass = ' loading';
 		}
 
-		if (this.props.users.length > 0) {
+		if (users && users.length > 0) {
 			let contentTmp = [];
-			panelContent = this.props.users.map(user =>
+			panelContent = users.map(user =>
 				<li key={user.id}>
 					<kbd>{user.name}</kbd>
 					{' '}
@@ -55,7 +60,7 @@ export default class UserList extends React.Component {
 						&nbsp;
 						<button
 							className={'btn btn-sm' + loadingClass}
-							onClick={this.handleFetch.bind(this)}
+							onClick={this.handleFetch}
 						>
 							<span>Aktualisieren</span>
 						</button>
