@@ -12,7 +12,12 @@ module.exports = {
 	context: __dirname,
 	devtool: 'source-map',
 	entry: {
-		app: ['./src/js/App.jsx'],
+		app: [
+			// we need polyfill to make async/await work
+			// for generators, to be more precise
+			'babel-polyfill',
+			'./src/js/App.jsx'
+		],
 		vendor: [
 			'react',
 			'react-dom',
@@ -64,18 +69,14 @@ module.exports = {
 						['es2015', { loose: true, modules: false }],
 						'stage-3'
 					],
-					plugins: debug
-						? [
-								'react-html-attrs',
-								'transform-decorators-legacy',
-								'transform-class-properties'
-							]
-						: [
-								'react-html-attrs',
-								'transform-decorators-legacy',
-								'transform-class-properties',
-								'transform-react-inline-elements'
-							]
+					plugins: [
+						'transform-async-to-generator',
+						'react-html-attrs',
+						'transform-decorators-legacy',
+						'transform-class-properties',
+					].concat(
+						debug ? [] : ['transform-react-inline-elements']
+					)
 				},
 				include: [path.resolve(__dirname, 'src')],
 				exclude: [/node_modules/]
