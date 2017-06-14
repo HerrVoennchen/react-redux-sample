@@ -5,7 +5,7 @@ import React from 'react';
 import ReactDom from 'react-dom';
 import UserListContainer from './Components/UserListContainer';
 import { Provider } from 'react-redux';
-import store from './Store';
+import { store } from './Store';
 import { Route, HashRouter as Router } from 'react-router-dom';
 
 const app = document.getElementById('App');

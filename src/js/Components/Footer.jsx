@@ -1,16 +1,18 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { selectors } from '../Store';
 
-@connect(store => {
-	return {
-		loading: store.metadata.isFetching
-	};
-})
+const mapStateToProps = state => ({
+	loading: selectors.api.data(state).isPending,
+});
+
+@connect(mapStateToProps)
 export default class Footer extends React.Component {
 	render() {
+		const { loading } = this.props;
 		let loadingContent = '';
 
-		if (this.props.loading) {
+		if (loading) {
 			loadingContent = <div className="loading center" />;
 		}
 
