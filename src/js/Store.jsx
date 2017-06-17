@@ -1,28 +1,25 @@
-import { applyMiddleware, createStore } from 'redux';
+import { applyMiddleware, createStore, combineReducers } from 'redux';
 import { composeWithDevTools } from 'redux-devtools-extension';
-import thunk from 'redux-thunk';
+//import thunk from 'redux-thunk';
 import { createLogger } from 'redux-logger';
-import promise from 'redux-promise-middleware';
+//import promise from 'redux-promise-middleware';
 import { createEntities, createMiddleware } from 'redux-tiles';
+import { get } from 'axios';
+
 import tiles from './Actions/UserActions';
-import axios from 'axios';
+import extraReducer from './Reducer/MetadataReducer';
 
-//const api = axios.create();
-const { actions, reducer, selectors } = createEntities(tiles);
-const { middleware, waitTiles } = createMiddleware({
-	//api,
+//const middleware = applyMiddleware(promise(), thunk, createLogger());
+const { actions, reducer, selectors } = createEntities(tiles, 'tiles');
+const params = {
 	actions,
-	selectors
-});
+	selectors,
+	api: { get }
+};
+const { middleware: tilesMiddleware, waitTiles } = createMiddleware(params);
+const middleware = applyMiddleware(tilesMiddleware, createLogger());
 
-const middlewareCompl = applyMiddleware(
-	promise(),
-	thunk,
-	createLogger(),
-	middleware
-);
-
-const store = createStore(reducer, composeWithDevTools(middlewareCompl));
+const store = createStore(combineReducers({ tiles: reducer, metadata: extraReducer }), composeWithDevTools(middleware));
 
 export { store };
 export { actions };

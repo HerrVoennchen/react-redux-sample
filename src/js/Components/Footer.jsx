@@ -4,7 +4,7 @@ import { selectors } from '../Store';
 
 @connect(store => {
 	return {
-		loading: selectors.users.listRequest(store).isPending
+		loading: store.metadata.isFetching //selectors.users.listRequest(store).isPending
 	};
 })
 export default class Footer extends React.Component {

@@ -7,6 +7,7 @@ var WebpackShellPlugin = require('webpack-shell-plugin');
 var OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 var NameAllModulesPlugin = require('name-all-modules-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
+var BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = {
 	context: __dirname,
@@ -23,8 +24,8 @@ module.exports = {
 			'classnames',
 			'redux',
 			'redux-logger',
-			'redux-promise-middleware',
-			'redux-thunk',
+			//'redux-promise-middleware',
+			//'redux-thunk',
 			'redux-tiles',
 			'redux-devtools-extension'
 		]
@@ -62,15 +63,11 @@ module.exports = {
 						],
 						'latest',
 						'react',
-						['es2015', { loose: true, modules: false }],
+						['es2015', { modules: false }],
 						'stage-3'
 					],
 					plugins: debug
-						? [
-								'react-html-attrs',
-								'transform-decorators-legacy',
-								'transform-class-properties'
-							]
+						? ['react-html-attrs', 'transform-decorators-legacy', 'transform-class-properties']
 						: [
 								'react-html-attrs',
 								'transform-decorators-legacy',
@@ -113,8 +110,7 @@ module.exports = {
 			},
 			{
 				test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
-				loader:
-					'url-loader?name=[name].[ext]&limit=10000&mimetype=application/font-woff'
+				loader: 'url-loader?name=[name].[ext]&limit=10000&mimetype=application/font-woff'
 			},
 			{
 				test: /\.(ttf|eot|svg|gif)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
@@ -136,9 +132,7 @@ module.exports = {
 					if (chunk.name) {
 						return chunk.name;
 					}
-					return chunk.modules
-						.map(m => path.relative(m.context, m.request))
-						.join('_');
+					return chunk.modules.map(m => path.relative(m.context, m.request)).join('_');
 				}),
 				new webpack.optimize.CommonsChunkPlugin({
 					name: 'vendor',
@@ -151,7 +145,8 @@ module.exports = {
 				new HtmlWebpackPlugin({
 					template: 'src/index.html',
 					xhtml: true
-				})
+				}),
+				new BundleAnalyzerPlugin()
 			]
 		: [
 				new webpack.DefinePlugin({
@@ -164,9 +159,7 @@ module.exports = {
 					if (chunk.name) {
 						return chunk.name;
 					}
-					return chunk.modules
-						.map(m => path.relative(m.context, m.request))
-						.join('_');
+					return chunk.modules.map(m => path.relative(m.context, m.request)).join('_');
 				}),
 				new webpack.optimize.CommonsChunkPlugin({
 					name: 'vendor',
@@ -212,7 +205,8 @@ module.exports = {
 						svgo: true
 					},
 					canPrint: true
-				})
+				}),
+				new BundleAnalyzerPlugin()
 			],
 	devServer: {
 		contentBase: 'src',

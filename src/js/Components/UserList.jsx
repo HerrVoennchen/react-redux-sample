@@ -2,13 +2,15 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { actions, selectors } from '../Store';
 
-@connect(store => {
-	return {
-		loading: selectors.users.listRequest(store).isPending,
-		users: selectors.users.listRequest(store).data
-	};
-}, { startRequest: actions.users.listRequest })
-
+@connect(
+	store => {
+		return {
+			loading: selectors.users.listRequest(store).isPending,
+			users: selectors.users.listRequest(store).data
+		};
+	},
+	{ startRequest: actions.users.listRequest }
+)
 export default class UserList extends React.Component {
 	constructor(props) {
 		super(props);
@@ -26,14 +28,15 @@ export default class UserList extends React.Component {
 	render() {
 		let loadingClass = '';
 		let panelContent = <li><mark>Keine Benutzer vorhanden</mark></li>;
+		let { loading, users } = this.props;
 
-		if (this.props.loading) {
+		if (loading) {
 			loadingClass = ' loading';
 		}
 
-		if (this.props.users && this.props.users.length > 0) {
+		if (users && users.length > 0) {
 			let contentTmp = [];
-			panelContent = this.props.users.map(user =>
+			panelContent = users.map(user =>
 				<li key={user.id}>
 					<kbd>{user.name}</kbd>
 					{' '}
@@ -56,10 +59,7 @@ export default class UserList extends React.Component {
 					<div className="panel-title">
 						Benutzerliste
 						&nbsp;
-						<button
-							className={'btn btn-sm' + loadingClass}
-							onClick={this.handleFetch}
-						>
+						<button className={'btn btn-sm' + loadingClass} onClick={this.handleFetch}>
 							<span>Aktualisieren</span>
 						</button>
 						<div className="divider" />
