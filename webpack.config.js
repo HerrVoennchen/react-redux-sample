@@ -28,7 +28,8 @@ module.exports = {
 			//'redux-thunk',
 			'redux-tiles',
 			'redux-devtools-extension',
-			'delounce'
+			'delounce',
+			'babel-polyfill'
 		]
 	},
 	output: {
