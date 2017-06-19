@@ -9,7 +9,7 @@ import { actions, selectors } from '../Store';
 			users: selectors.users.listRequest(store).data
 		};
 	},
-	{ startRequest: actions.users.listRequest }
+	{ startRequest: actions.users.listRequest2 }
 )
 export default class UserList extends React.Component {
 	constructor(props) {

@@ -13,7 +13,7 @@ module.exports = {
 	context: __dirname,
 	devtool: 'source-map',
 	entry: {
-		app: ['./src/js/App.jsx'],
+		app: ['babel-polyfill', './src/js/App.jsx'],
 		vendor: [
 			'react',
 			'react-dom',
@@ -27,7 +27,8 @@ module.exports = {
 			//'redux-promise-middleware',
 			//'redux-thunk',
 			'redux-tiles',
-			'redux-devtools-extension'
+			'redux-devtools-extension',
+			'delounce'
 		]
 	},
 	output: {
@@ -55,19 +56,23 @@ module.exports = {
 							'env',
 							{
 								targets: {
-									browsers: ['chrome >= 54']
+									browsers: ['chrome >= 54', 'firefox > 50']
 								},
 								loose: true,
-								modules: false
+								modules: false,
+								useBuiltIns: true,
+								debug: true
 							}
 						],
-						'latest',
 						'react',
-						['es2015', { modules: false }],
 						'stage-3'
 					],
 					plugins: debug
-						? ['react-html-attrs', 'transform-decorators-legacy', 'transform-class-properties']
+						? [
+								'react-html-attrs',
+								'transform-decorators-legacy',
+								'transform-class-properties'
+							]
 						: [
 								'react-html-attrs',
 								'transform-decorators-legacy',
@@ -145,8 +150,8 @@ module.exports = {
 				new HtmlWebpackPlugin({
 					template: 'src/index.html',
 					xhtml: true
-				}),
-				new BundleAnalyzerPlugin()
+				}) //,
+				//new BundleAnalyzerPlugin()
 			]
 		: [
 				new webpack.DefinePlugin({
